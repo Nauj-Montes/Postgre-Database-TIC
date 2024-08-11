@@ -30,6 +30,6 @@ echo "Iniciando servidor backend..."
 npm start
 
 echo "Iniciando servidor frontend..."
-cd client
+cd ./client
 
 npm install && npm start
