@@ -22,3 +22,14 @@ sleep 15
 echo "Importando base de datos..."
 pwd
 ./scripts/import_db.sh
+
+echo "Esperando 15 segundos..., por favor espere..."
+sleep 15
+
+echo "Iniciando servidor backend..."
+npm start
+
+echo "Iniciando servidor frontend..."
+cd client
+
+npm install && npm start
