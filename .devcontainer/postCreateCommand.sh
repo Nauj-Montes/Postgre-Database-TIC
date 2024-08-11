@@ -27,4 +27,21 @@ echo "Esperando 15 segundos..., por favor espere..."
 sleep 15
 
 echo "Iniciando servidor backend..."
+
+# npm start in the background
+npm start &
+
+# Wait for the backend server to start
+while ! curl -s http://localhost:3000 > /dev/null; do
+    echo "Backend server is not running. Waiting for 10 seconds before retrying..."
+    sleep 10
+done
+
+echo "Servidor backend iniciado correctamente."
+
+echo "Iniciando servidor frontend..."
+
+# npm build and start in the background inside client directory
+cd client
+npm install
 npm start &
