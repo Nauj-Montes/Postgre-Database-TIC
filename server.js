@@ -11,11 +11,15 @@ app.use(express.json());
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
-//Estableciendo direcciones de las rutas de las APIs
-app.use("api/v1/contacts", contactRoutes);
-app.use("api/v1/interaction", interactionRoutes);
+// Testing root route
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+app.use("/api/v1/contacts", contactRoutes);
+/* app.use("api/v1/interaction", interactionRoutes);
 app.use("api/v1/report", reportRoutes);
-app.use("api/v1/salesRoutes", salesRoutes);
+app.use("api/v1/salesRoutes", salesRoutes); */
 
 /* Middlewares on app
 app.use(logErrors);
