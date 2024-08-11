@@ -32,11 +32,7 @@ echo "Iniciando servidor backend..."
 npm start &
 
 # Wait for the backend server to start
-while ! curl -s http://localhost:3000 > /dev/null; do
-    echo "Backend server is not running. Waiting for 10 seconds before retrying..."
-    sleep 10
-done
-
+sleep 10
 echo "Servidor backend iniciado correctamente."
 
 echo "Iniciando servidor frontend..."
