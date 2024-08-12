@@ -16,6 +16,8 @@
                 "workbench.iconTheme": "material-icon-theme",
                 "workbench.panel.defaultLocation": "right",
                 "workbench.sideBar.location": "right"
+                /* Make Port fowarding public */
+                
             }
         }
     },
