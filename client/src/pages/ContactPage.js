@@ -14,6 +14,7 @@ function ContactPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [viewMode, setViewMode] = useState("table"); // Add viewMode state
+  const [searchQuery, setSearchQuery] = useState(""); // Add searchQuery state
 
   useEffect(() => {
     contactService
@@ -32,6 +33,13 @@ function ContactPage() {
   if (error)
     return <Alert message="Error" description={error} type="error" showIcon />;
 
+  // Filter contacts based on search query
+  const filteredContacts = contacts.filter((contact) =>
+    `${contact.firstName} ${contact.lastName}`
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Layout className="contact-page">
       <Content className="contact-header">
@@ -41,13 +49,14 @@ function ContactPage() {
         <ContactHeader
           refreshContacts={() => contactService.getContacts().then(setContacts)}
           setViewMode={setViewMode} // Pass setViewMode to ContactHeader
+          setSearchQuery={setSearchQuery} // Pass setSearchQuery to ContactHeader
         />
       </Content>
       <Content>
         {viewMode === "table" ? (
-          <ContactList contacts={contacts} />
+          <ContactList contacts={filteredContacts} />
         ) : (
-          <ContactGrid contacts={contacts} /> // Use ContactGrid component
+          <ContactGrid contacts={filteredContacts} /> // Use ContactGrid component
         )}
       </Content>
     </Layout>

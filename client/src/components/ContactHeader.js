@@ -34,7 +34,7 @@ const StyledContactHeader = styled.div`
   }
 `;
 
-function ContactHeader({ refreshContacts, setViewMode }) {
+function ContactHeader({ refreshContacts, setViewMode, setSearchQuery }) {
   const [contact, setContact] = useState({
     firstName: "",
     lastName: "",
@@ -66,7 +66,7 @@ function ContactHeader({ refreshContacts, setViewMode }) {
         <Input
           placeholder="Search by name"
           prefix={<SearchOutlined />}
-          onChange={(e) => console.log(e.target.value)} // Implement search functionality here
+          onChange={(e) => setSearchQuery(e.target.value)} // Update search query
         />
         <Button icon={<TableOutlined />} onClick={() => setViewMode("table")} />
         <Button
