@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Container, Box, Typography } from "@mui/material";
 import ContactForm from "../components/ContactForm";
 import ContactList from "../components/ContactList";
 import contactService from "../services/contactService";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorAlert from "../components/ErrorAlert";
+import "../styles/ContactPage.css"; // Import the CSS file
 
 function ContactPage() {
   const [contacts, setContacts] = useState([]);
@@ -27,12 +29,17 @@ function ContactPage() {
   if (error) return <ErrorAlert message={error} />;
 
   return (
-    <div>
-      <ContactForm
-        refreshContacts={() => contactService.getContacts().then(setContacts)}
-      />
+    <Container className="contact-page">
+      <Box className="contact-form">
+        <Typography variant="h4" gutterBottom>
+          Contact Management
+        </Typography>
+        <ContactForm
+          refreshContacts={() => contactService.getContacts().then(setContacts)}
+        />
+      </Box>
       <ContactList contacts={contacts} />
-    </div>
+    </Container>
   );
 }
 

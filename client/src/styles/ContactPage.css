@@ -1,0 +1,12 @@
+.contact-page {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    
+  }
+  
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
