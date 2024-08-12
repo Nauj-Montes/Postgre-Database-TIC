@@ -1,20 +1,35 @@
 .styled-list-item {
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-  }
-  
-  .contact-avatar {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .contact-details {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .contact-details p {
-    margin: 0;
-  }
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.contact-avatar {
+  width: 50px;
+  height: 50px;
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-details p {
+  margin: 0;
+}
+
+.contact-table {
+  width: 100%;
+  overflow-x: auto; /* Add horizontal scroll if needed */
+}
+
+.contact-table .ant-table-body {
+  max-height: 400px; /* Set a max height for the table body */
+  overflow-y: auto; /* Add vertical scroll if needed */
+}
+
+.delete-button {
+  border-color: red;
+  color: red;
+}

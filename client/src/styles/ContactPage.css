@@ -5,9 +5,9 @@
   background-color: #f0f2f5; /* Ant Design default background color */
 }
 
-.contact-form {
+.contact-header {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   margin-bottom: 24px; /* Slightly larger margin for better spacing */
   background: #fff; /* White background for form */
   padding: 24px; /* Padding inside the form */

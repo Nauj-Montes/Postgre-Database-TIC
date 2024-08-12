@@ -1,0 +1,20 @@
+.contact-drawer .avatar-item {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .contact-drawer .avatar {
+    animation: bounce 2s infinite;
+  }
+  
+  
+  .contact-drawer .save-button {
+    width: 100%;
+    background-color: #1890ff;
+    border-color: #1890ff;
+  }
+  
+  .contact-drawer .save-button:hover {
+    background-color: #40a9ff;
+    border-color: #40a9ff;
+  }

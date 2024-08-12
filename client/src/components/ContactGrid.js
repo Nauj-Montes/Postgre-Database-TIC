@@ -26,7 +26,6 @@ function ContactGrid({ contacts, onContactClick }) {
           <Card
             key={contact.id}
             hoverable
-            style={{ width: 240 }}
             cover={<Avatar src={contact.avatar} size={64} />}
             onClick={() => onContactClick(contact)}
           >

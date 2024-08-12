@@ -6,6 +6,9 @@ import ContactGrid from "../components/ContactGrid";
 import ContactDrawer from "../components/ContactDrawer"; // Import ContactDrawer
 import contactService from "../services/contactService";
 import "../styles/ContactPage.css";
+import LoadingSpinner from "../components/LoadingSpinner";
+import PlaceholderList from "../components/PlaceholderList";
+import PlaceholderGrid from "../components/PlaceholderGrid.js";
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -54,7 +57,6 @@ function ContactPage() {
     handleDrawerClose();
   };
 
-  if (loading) return <Spin size="large" />;
   if (error)
     return <Alert message="Error" description={error} type="error" showIcon />;
 
@@ -67,9 +69,6 @@ function ContactPage() {
   return (
     <Layout className="contact-page">
       <Content className="contact-header">
-        <Title level={2} gutterBottom>
-          Contact Management
-        </Title>
         <ContactHeader
           refreshContacts={() => contactService.getContacts().then(setContacts)}
           setViewMode={setViewMode}
@@ -77,7 +76,13 @@ function ContactPage() {
         />
       </Content>
       <Content>
-        {viewMode === "table" ? (
+        {loading ? (
+          viewMode === "table" ? (
+            <PlaceholderList />
+          ) : (
+            <PlaceholderGrid />
+          )
+        ) : viewMode === "table" ? (
           <ContactList
             contacts={filteredContacts}
             onContactClick={handleContactClick}
