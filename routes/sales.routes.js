@@ -1,12 +1,27 @@
 const { Router } = require("express");
-const salesController = require("../controllers/sales.controller");
+const { createSaleController, getSalesController, getSaleByIdController, updateSaleController, deleteSaleController } = require("../controllers/sales.controller");
 
 const router = Router();
 
-// Crear una nueva venta
-router.post("/", (req, res) => salesController.createSale(req, res));
+// Create a new sale
 
-// Actualizar una venta por ID
-router.put("/:id", (req, res) => salesController.updateSale(req, res));
+router.post("/", (req, res) => createSaleController(req, res));
+
+// Get all sales
+
+router.get("/", (req, res) => getSalesController(req, res));
+
+// Get a sale by ID
+
+router.get("/:id", (req, res) => getSaleByIdController(req, res));
+
+// Update a sale by ID
+
+router.put("/:id", (req, res) => updateSaleController(req, res));
+
+// Delete a sale by ID
+
+router.delete("/:id", (req, res) => deleteSaleController(req, res));
 
 module.exports = router;
+

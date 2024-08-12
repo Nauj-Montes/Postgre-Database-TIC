@@ -22,6 +22,25 @@ const Contact = sequelize.define('Contact', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  avatar: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  firstName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  lastName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    validate: {
+      isEmail: true,
+    },
+  },
 }, {
   timestamps: true,
   tableName: 'contacts',

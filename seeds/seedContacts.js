@@ -1,4 +1,3 @@
-// Import required modules
 const { faker } = require('@faker-js/faker'); // Importing the latest Faker version
 const sequelize = require('../config/sequelize'); // Your Sequelize instance
 const Contact = require('../models/contact.model'); // Your Contact model
@@ -25,6 +24,10 @@ async function generateFakeContacts() {
       userId: user.id,
       phoneNumber: faker.phone.number(),
       address: faker.location.streetAddress(),
+      avatar: user.avatar, // Use avatar from User table
+      firstName: user.firstName, // Use firstName from User table
+      lastName: user.lastName, // Use lastName from User table
+      email: user.email, // Use email from User table
     };
 
     fakeContacts.push(contact);

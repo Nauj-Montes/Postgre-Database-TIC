@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/sequelize');
 
 // Definir el modelo de ventas
-const Sale = sequelize.define('Sale', {
+const Sales = sequelize.define('Sales', {
   contactId: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -44,5 +44,5 @@ const Sale = sequelize.define('Sale', {
 });
 
 // Exportar el modelo
-module.exports = Sale;
+module.exports = Sales;
 

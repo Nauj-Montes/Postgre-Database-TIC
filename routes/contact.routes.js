@@ -11,3 +11,4 @@ router.put("/:id", (req, res) => controller.updateContact(req, res));
 router.delete("/:id", (req, res) => controller.deleteContact(req, res));
 
 module.exports = router;
+
