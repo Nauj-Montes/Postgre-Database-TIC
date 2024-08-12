@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Container, Box, Typography } from "@mui/material";
-import ContactForm from "../components/ContactForm";
+import { Layout, Typography, Spin, Alert } from "antd";
+import ContactHeader from "../components/ContactHeader";
 import ContactList from "../components/ContactList";
+import ContactGrid from "../components/ContactGrid"; // Import ContactGrid
 import contactService from "../services/contactService";
-import LoadingSpinner from "../components/LoadingSpinner";
-import ErrorAlert from "../components/ErrorAlert";
 import "../styles/ContactPage.css"; // Import the CSS file
+
+const { Content } = Layout;
+const { Title } = Typography;
 
 function ContactPage() {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [viewMode, setViewMode] = useState("table"); // Add viewMode state
 
   useEffect(() => {
     contactService
@@ -25,21 +28,29 @@ function ContactPage() {
       });
   }, []);
 
-  if (loading) return <LoadingSpinner />;
-  if (error) return <ErrorAlert message={error} />;
+  if (loading) return <Spin size="large" />;
+  if (error)
+    return <Alert message="Error" description={error} type="error" showIcon />;
 
   return (
-    <Container className="contact-page">
-      <Box className="contact-form">
-        <Typography variant="h4" gutterBottom>
+    <Layout className="contact-page">
+      <Content className="contact-header">
+        <Title level={2} gutterBottom>
           Contact Management
-        </Typography>
-        <ContactForm
+        </Title>
+        <ContactHeader
           refreshContacts={() => contactService.getContacts().then(setContacts)}
+          setViewMode={setViewMode} // Pass setViewMode to ContactHeader
         />
-      </Box>
-      <ContactList contacts={contacts} />
-    </Container>
+      </Content>
+      <Content>
+        {viewMode === "table" ? (
+          <ContactList contacts={contacts} />
+        ) : (
+          <ContactGrid contacts={contacts} /> // Use ContactGrid component
+        )}
+      </Content>
+    </Layout>
   );
 }
 

@@ -1,51 +1,59 @@
 import React from "react";
-import {
-  List,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
-  ListItemSecondaryAction,
-  IconButton,
-} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Table, Avatar, Button, Space } from "antd";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import "../styles/ContactList.css"; // Import the CSS file
 
 function ContactList({ contacts }) {
-  return (
-    <List>
-      {contacts.map((contact) => (
-        <ListItem key={contact.id} className="styled-list-item">
-          <ListItemAvatar>
-            <Avatar
-              src={contact.avatar}
-              alt={`${contact.firstName} ${contact.lastName}`}
-              className="contact-avatar"
-            />
-          </ListItemAvatar>
-          <ListItemText
-            primary={`${contact.firstName} ${contact.lastName}`}
-            secondary={
-              <div className="contact-details">
-                <p>Phone: {contact.phoneNumber}</p>
-                <p>Address: {contact.address}</p>
-                <p>Email: {contact.email}</p>
-              </div>
-            }
-          />
-          <ListItemSecondaryAction>
-            <IconButton edge="end" aria-label="edit">
-              <EditIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete">
-              <DeleteIcon />
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
-      ))}
-    </List>
-  );
+  const columns = [
+    {
+      title: "Avatar",
+      dataIndex: "avatar",
+      key: "avatar",
+      render: (text, record) => (
+        <Avatar
+          src={record.avatar}
+          alt={`${record.firstName} ${record.lastName}`}
+        />
+      ),
+    },
+    {
+      title: "First Name",
+      dataIndex: "firstName",
+      key: "firstName",
+    },
+    {
+      title: "Last Name",
+      dataIndex: "lastName",
+      key: "lastName",
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (text, record) => (
+        <Space size="middle">
+          <Button icon={<EditOutlined />} />
+          <Button icon={<DeleteOutlined />} />
+        </Space>
+      ),
+    },
+  ];
+
+  return <Table dataSource={contacts} columns={columns} rowKey="id" />;
 }
 
 export default ContactList;

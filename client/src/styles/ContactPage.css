@@ -1,12 +1,16 @@
 .contact-page {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    
-  }
-  
-  .contact-form {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f0f2f5; /* Ant Design default background color */
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px; /* Slightly larger margin for better spacing */
+  background: #fff; /* White background for form */
+  padding: 24px; /* Padding inside the form */
+  border-radius: 4px; /* Rounded corners */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+}

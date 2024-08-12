@@ -1,46 +1,36 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { AppBar, Toolbar, Button } from "@mui/material";
+import { Layout, Menu } from "antd";
 import "../styles/Navbar.css"; // Import the CSS file
+
+const { Sider } = Layout;
 
 function Navbar() {
   return (
-    <AppBar position="static" className="navbar">
-      <Toolbar>
-        <Button
-          color="inherit"
-          component={Link}
-          to="/contacts"
-          className="nav-link"
-        >
-          Contacts
-        </Button>
-        <Button
-          color="inherit"
-          component={Link}
-          to="/interactions"
-          className="nav-link"
-        >
-          Interactions
-        </Button>
-        <Button
-          color="inherit"
-          component={Link}
-          to="/sales"
-          className="nav-link"
-        >
-          Sales
-        </Button>
-        <Button
-          color="inherit"
-          component={Link}
-          to="/reports"
-          className="nav-link"
-        >
-          Reports
-        </Button>
-      </Toolbar>
-    </AppBar>
+    <Sider className="ant-sider-navbar">
+      <Menu className="ochinchi">
+        <Menu.Item key="1">
+          <Link to="/contacts" className="ant-nav-link">
+            Contacts
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="2">
+          <Link to="/interactions" className="ant-nav-link">
+            Interactions
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="3">
+          <Link to="/sales" className="ant-nav-link">
+            Sales
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="4">
+          <Link to="/reports" className="ant-nav-link">
+            Reports
+          </Link>
+        </Menu.Item>
+      </Menu>
+    </Sider>
   );
 }
 
