@@ -27,4 +27,4 @@ echo "Esperando 15 segundos..., por favor espere..."
 sleep 15
 
 echo "Iniciando servidor backend..."
-npm start
+npm start &

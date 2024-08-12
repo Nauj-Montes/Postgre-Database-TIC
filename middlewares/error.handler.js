@@ -1,19 +1,23 @@
-const express = require("express");
-const Routes = require("../routes");
-const {
-  logErrors,
-  errorHandler,
-  boomErrorHandler,
-} = require("./middlewares/error.handler.js");
-const app = express();
-const port = 3000;
+function logErrors(err, req, res, next) {
+  console.error(err.stack);
+  next(err);
+}
 
-app.use(express.json());
+function boomErrorHandler(err, req, res, next) {
+  if (err.isBoom) {
+    const { output } = err;
+    res.status(output.statusCode).json(output.payload);
+  } else {
+    next(err);
+  }
+}
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+function errorHandler(err, req, res, next) {
+  res.status(500).json({
+    message: "An internal server error occurred",
+    statusCode: 500,
+    error: "Internal Server Error"
+  });
+}
 
-app.use("/api/v1");
-
-app.use(logErrors);
-app.use(boomErrorHandler);
-app.use(errorHandler);
+module.exports = { logErrors, boomErrorHandler, errorHandler };
