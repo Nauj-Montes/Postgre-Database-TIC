@@ -1,9 +1,9 @@
 import React from "react";
 import { Table, Avatar, Button, Space } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import "../styles/ContactList.css"; // Import the CSS file
+import "../styles/ContactList.css";
 
-function ContactList({ contacts }) {
+function ContactList({ contacts, onContactClick }) {
   const columns = [
     {
       title: "Avatar",
@@ -46,7 +46,10 @@ function ContactList({ contacts }) {
       key: "actions",
       render: (text, record) => (
         <Space size="middle">
-          <Button icon={<EditOutlined />} />
+          <Button
+            icon={<EditOutlined />}
+            onClick={() => onContactClick(record)}
+          />
           <Button icon={<DeleteOutlined />} />
         </Space>
       ),

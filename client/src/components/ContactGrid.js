@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { Card, Avatar, Pagination } from "antd";
-import "../styles/ContactGrid.css"; // Import the CSS file
+import "../styles/ContactGrid.css";
 
 const { Meta } = Card;
 
-function ContactGrid({ contacts }) {
+function ContactGrid({ contacts, onContactClick }) {
   const [currentPage, setCurrentPage] = useState(1);
   const contactsPerPage = 12;
 
-  // Calculate the contacts to display on the current page
   const indexOfLastContact = currentPage * contactsPerPage;
   const indexOfFirstContact = indexOfLastContact - contactsPerPage;
   const currentContacts = contacts.slice(
@@ -16,7 +15,6 @@ function ContactGrid({ contacts }) {
     indexOfLastContact
   );
 
-  // Handle page change
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -30,6 +28,7 @@ function ContactGrid({ contacts }) {
             hoverable
             style={{ width: 240 }}
             cover={<Avatar src={contact.avatar} size={64} />}
+            onClick={() => onContactClick(contact)}
           >
             <Meta
               title={`${contact.firstName} ${contact.lastName}`}
