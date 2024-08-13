@@ -1,9 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "https://potential-invention-xxx64q6rjpgf9pxq-3000.app.github.dev/api/v1/contacts";
-
-console.log("API_URL", API_URL);
+  "https://sturdy-train-6ww6p76v777f4465-3000.app.github.dev/api/v1/contacts";
 
 const getContacts = async () => {
   const response = await axios.get(API_URL);

@@ -2,10 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import {
+  DashboardOutlined,
+  CalendarOutlined,
   ContactsOutlined,
-  InteractionOutlined,
-  DollarOutlined,
-  BarChartOutlined,
+  BuildOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import "../styles/Navbar.css"; // Import the CSS file
 
@@ -16,27 +17,33 @@ function Navbar() {
     <Sider className="ant-sider-navbar">
       <Menu className="ochinchi">
         <Menu.Item key="1">
+          <Link to="/" className="ant-nav-link">
+            <DashboardOutlined />
+            Dashboard
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="2">
+          <Link to="/calendar" className="ant-nav-link">
+            <CalendarOutlined />
+            Calendar
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="3">
+          <Link to="/companies" className="ant-nav-link">
+            <BuildOutlined />
+            Companies
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="4">
           <Link to="/contacts" className="ant-nav-link">
             <ContactsOutlined />
             Contacts
           </Link>
         </Menu.Item>
-        <Menu.Item key="2">
-          <Link to="/interactions" className="ant-nav-link">
-            <InteractionOutlined />
-            Interactions
-          </Link>
-        </Menu.Item>
-        <Menu.Item key="3">
-          <Link to="/sales" className="ant-nav-link">
-            <DollarOutlined />
-            Sales
-          </Link>
-        </Menu.Item>
-        <Menu.Item key="4">
-          <Link to="/reports" className="ant-nav-link">
-            <BarChartOutlined />
-            Reports
+        <Menu.Item key="5">
+          <Link to="/administration" className="ant-nav-link">
+            <SettingOutlined />
+            Administration
           </Link>
         </Menu.Item>
       </Menu>

@@ -33,6 +33,7 @@ function ContactGrid({ contacts, onContactClick }) {
               title={`${contact.firstName} ${contact.lastName}`}
               description={
                 <>
+                  <p>{contact.companyName}</p>
                   <p>{contact.phoneNumber}</p>
                   <p>{contact.email}</p>
                   <p>{contact.address}</p>

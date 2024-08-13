@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Typography, Spin, Alert } from "antd";
+import { Layout, Typography, Alert } from "antd";
 import ContactHeader from "../components/ContactHeader";
 import ContactList from "../components/ContactList";
 import ContactGrid from "../components/ContactGrid";
 import ContactDrawer from "../components/ContactDrawer"; // Import ContactDrawer
 import contactService from "../services/contactService";
 import "../styles/ContactPage.css";
-import LoadingSpinner from "../components/LoadingSpinner";
 import PlaceholderList from "../components/PlaceholderList";
 import PlaceholderGrid from "../components/PlaceholderGrid.js";
 

@@ -29,6 +29,15 @@
   overflow-y: auto; /* Add vertical scroll if needed */
 }
 
+.contact-name {
+  display: flex;
+  align-items: center;
+}
+
+.contact-company {
+  color: #888;
+}
+
 .delete-button {
   border-color: red;
   color: red;

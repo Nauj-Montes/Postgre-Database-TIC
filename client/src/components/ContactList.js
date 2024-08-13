@@ -6,40 +6,25 @@ import "../styles/ContactList.css";
 function ContactList({ contacts, onContactClick }) {
   const columns = [
     {
-      title: "Avatar",
-      dataIndex: "avatar",
-      key: "avatar",
+      title: "Name",
+      key: "name",
       render: (text, record) => (
-        <Avatar
-          src={record.avatar}
-          alt={`${record.firstName} ${record.lastName}`}
-          className="contact-avatar"
-        />
+        <Space>
+          <Avatar
+            src={record.avatar}
+            alt={`${record.firstName} ${record.lastName}`}
+            className="contact-avatar"
+          />
+          <span>{`${record.firstName} ${record.lastName}`}</span>
+        </Space>
       ),
+      className: "contact-name",
     },
     {
-      title: "First Name",
-      dataIndex: "firstName",
-      key: "firstName",
-      className: "contact-first-name",
-    },
-    {
-      title: "Last Name",
-      dataIndex: "lastName",
-      key: "lastName",
-      className: "contact-last-name",
-    },
-    {
-      title: "Phone Number",
-      dataIndex: "phoneNumber",
-      key: "phoneNumber",
-      className: "contact-phone-number",
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-      className: "contact-address",
+      title: "Company",
+      dataIndex: "companyName",
+      key: "companyName",
+      className: "contact-company",
     },
     {
       title: "Email",
