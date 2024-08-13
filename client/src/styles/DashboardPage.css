@@ -1,0 +1,25 @@
+.fixed-height-card {
+    height: 400px; /* Adjust the height as needed */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .overflow-card {
+    overflow-y: auto;
+  }
+  
+  .animated-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .animated-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .ant-statistic-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }

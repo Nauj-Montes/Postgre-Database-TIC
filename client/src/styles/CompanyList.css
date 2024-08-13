@@ -1,0 +1,26 @@
+.company-table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.company-logo,
+.sales-owner-avatar {
+  border-radius: 50%;
+}
+
+
+.company-revenue .anticon {
+  color: #1890ff;
+}
+
+.company-industry .anticon {
+  color: #1890ff;
+}
+
+.edit-button {
+  color: #1890ff;
+}
+
+.delete-button {
+  color: #ff4d4f;
+}

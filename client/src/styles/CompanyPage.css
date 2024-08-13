@@ -1,0 +1,14 @@
+.company-page {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    background-color: #f0f2f5; /* Ant Design default background color */
+  }
+  
+  .company-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px; /* Slightly larger margin for better spacing */
+    background: transparent; /* White background for form */
+    border-radius: 4px; /* Rounded corners */
+  }
