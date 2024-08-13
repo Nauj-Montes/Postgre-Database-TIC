@@ -41,9 +41,28 @@ const Contact = sequelize.define('Contact', {
       isEmail: true,
     },
   },
+  companyName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  industry: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  companyLogo: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  companyDeals: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  companyRevenue: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
 }, {
-  timestamps: true,
-  tableName: 'contacts',
+  tableName: 'contacts', // Specify the table name here
 });
 
 User.hasOne(Contact, { foreignKey: 'userId' });

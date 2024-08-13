@@ -13,7 +13,7 @@ const Interaction = sequelize.define('Interaction', {
     },
   },
   type: {
-    type: DataTypes.ENUM('email', 'call', 'purchase'),
+    type: DataTypes.ENUM('email', 'call', 'deal', 'meeting', 'other'),
     allowNull: false,
   },
   date: {

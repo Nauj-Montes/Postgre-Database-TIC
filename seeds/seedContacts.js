@@ -1,5 +1,6 @@
 const { faker } = require('@faker-js/faker'); // Importing the latest Faker version
 const sequelize = require('../config/sequelize'); // Your Sequelize instance
+const { getRandomIndustry } = require('../utils/getRandomIndustry'); // Your getRandomIndustry function
 const Contact = require('../models/contact.model'); // Your Contact model
 const User = require('../models/user.model'); // Your User model
 
@@ -28,6 +29,11 @@ async function generateFakeContacts() {
       firstName: user.firstName, // Use firstName from User table
       lastName: user.lastName, // Use lastName from User table
       email: user.email, // Use email from User table
+      companyName: faker.company.name(),
+      industry: getRandomIndustry(),
+      companyLogo: faker.image.urlLoremFlickr({ category: 'business-logo' }), // Generate a fake company logo image URL
+      companyDeals: faker.number.int({ min: 0, max: 100 }), // Generate a random number of deals
+      companyRevenue: faker.number.int({ min: 1000, max: 1000000 }), // Generate a random revenue amount
     };
 
     fakeContacts.push(contact);

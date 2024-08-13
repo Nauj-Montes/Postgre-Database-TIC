@@ -3,7 +3,7 @@ const sequelize = require('../config/sequelize');
 const Interaction = require('../models/interaction.model');
 const Contact = require('../models/contact.model');
 
-const interactionTypes = ['email', 'call', 'purchase'];
+const interactionTypes = ['email', 'call', 'deal', 'meeting', 'other'];
 
 async function seedInteractions() {
   try {
@@ -21,7 +21,7 @@ async function seedInteractions() {
       const interaction = {
         contactId: randomContact.id,
         type: randomType,
-        date: new Date(),
+        date: faker.date.soon(),
         notes: faker.lorem.sentence(),
       };
 
