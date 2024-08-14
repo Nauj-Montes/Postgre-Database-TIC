@@ -13,9 +13,11 @@ async function getContacts(req, res) {
 // Create a new contact
 async function createContact(req, res) {
   try {
-    const newContact = await contactService.createContact(req.body);
+    const contactData = req.body;
+    const newContact = await contactService.createContact(contactData);
     res.status(201).json(newContact);
   } catch (error) {
+    console.error('Error creating contact:', error); // Log the error details
     res.status(error.output.statusCode || 500).json(error.output.payload);
   }
 }
