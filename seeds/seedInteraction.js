@@ -21,7 +21,8 @@ async function seedInteractions() {
       const interaction = {
         contactId: randomContact.id,
         type: randomType,
-        date: faker.date.soon(),
+        /* I want a random date from august 1 to august 31 of 2024 */
+        date: faker.date.between('2024-08-01', '2024-08-31'),
         notes: faker.lorem.sentence(),
       };
 

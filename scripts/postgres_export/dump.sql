@@ -188,7 +188,10 @@ COMMENT ON DATABASE postgres IS 'default administrative connection database';
 CREATE TYPE public.enum_interactions_type AS ENUM (
     'email',
     'call',
-    'purchase'
+    'purchase',
+    'deal',
+    'meeting',
+    'other'
 );
 
 
@@ -224,6 +227,11 @@ CREATE TABLE public.contacts (
     "firstName" character varying(255),
     "lastName" character varying(255),
     email character varying(255),
+    "companyName" character varying(255),
+    industry character varying(255),
+    "companyLogo" character varying(255),
+    "companyDeals" integer,
+    "companyRevenue" integer,
     "createdAt" timestamp with time zone NOT NULL,
     "updatedAt" timestamp with time zone NOT NULL
 );
@@ -251,6 +259,45 @@ ALTER SEQUENCE public.contacts_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.contacts_id_seq OWNED BY public.contacts.id;
+
+
+--
+-- Name: interactions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.interactions (
+    id integer NOT NULL,
+    "contactId" integer NOT NULL,
+    type public.enum_interactions_type NOT NULL,
+    date timestamp with time zone NOT NULL,
+    notes text,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.interactions OWNER TO postgres;
+
+--
+-- Name: interactions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.interactions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.interactions_id_seq OWNER TO postgres;
+
+--
+-- Name: interactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.interactions_id_seq OWNED BY public.interactions.id;
 
 
 --
@@ -303,6 +350,13 @@ ALTER TABLE ONLY public.contacts ALTER COLUMN id SET DEFAULT nextval('public.con
 
 
 --
+-- Name: interactions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.interactions ALTER COLUMN id SET DEFAULT nextval('public.interactions_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -313,107 +367,135 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: contacts; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.contacts (id, "userId", "phoneNumber", address, avatar, "firstName", "lastName", email, "createdAt", "updatedAt") FROM stdin;
-1	59	1-884-328-7688 x40923	45016 Hermann Dam	https://avatars.githubusercontent.com/u/36948957	Magnolia	Mante	Wyman80@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-2	71	(894) 554-2545	277 Pearl Street	https://avatars.githubusercontent.com/u/79029074	Myrna	Schimmel	Anibal_Wiza@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-3	99	304.457.6599 x062	3991 Treutel Oval	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/456.jpg	Susie	Schumm	Felicity.Wintheiser48@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-4	68	(584) 373-1430	9972 Koss Falls	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/212.jpg	Zaria	Huel	Alexander.Schaden5@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-5	38	743-410-8321 x14047	719 Jamil Highway	https://avatars.githubusercontent.com/u/90952367	Bell	Lebsack	Margaretta_Reichel@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-6	50	1-358-502-9799 x6549	78603 Fadel Divide	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/654.jpg	Pierce	Upton	Jessica_Spencer@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-7	16	1-282-452-5613	87392 Depot Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/652.jpg	Joanne	Shields	Jewell_Pfannerstill4@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-8	15	(480) 618-6673 x082	1410 Leannon Walk	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/348.jpg	Eulalia	Walter	Frederic_Vandervort61@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-9	12	262.606.0452 x14262	812 Eleanore Key	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/114.jpg	Mattie	Hickle	Laron2@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-10	93	(919) 706-5489 x795	259 Silver Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/125.jpg	Gabriel	Kautzer	Tyrel57@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-11	57	369-227-4162	1332 Lonny Hills	https://avatars.githubusercontent.com/u/31125969	Juliana	Goldner	Mathew96@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-12	34	1-880-682-4938 x6425	97323 Schultz Summit	https://avatars.githubusercontent.com/u/13174152	Christian	Hermiston	Constance_Collins39@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-13	68	720-746-2153 x36593	4001 Smitham Wall	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/212.jpg	Zaria	Huel	Alexander.Schaden5@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-14	22	1-546-275-3456 x665	2505 Spring Gardens	https://avatars.githubusercontent.com/u/10970132	Bradly	Towne-Toy	Coy27@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-15	100	(320) 492-0134 x972	9827 Sheldon Flats	https://avatars.githubusercontent.com/u/17973803	Neha	Osinski	Titus_Marquardt1@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-16	10	1-646-844-6604	828 Ilene Fall	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/713.jpg	Mabelle	Weber	Effie.Nienow99@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-17	34	(269) 270-8322 x32620	537 Kerluke Ville	https://avatars.githubusercontent.com/u/13174152	Christian	Hermiston	Constance_Collins39@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-18	38	414.641.3189	68630 Cooper Squares	https://avatars.githubusercontent.com/u/90952367	Bell	Lebsack	Margaretta_Reichel@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-19	78	208.653.4021 x133	83921 Conn Ville	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/475.jpg	Amani	Kling	Annamarie.Mayer29@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-20	97	618-986-4846	169 Isabell Orchard	https://avatars.githubusercontent.com/u/9414723	Abigail	Hudson	Angelina.Schinner@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-21	9	583.354.5391 x59520	89468 Frami Wall	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/952.jpg	Francisco	Weissnat	Rhett.Walsh47@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-22	14	214-361-0179 x3195	14961 Glover Plain	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/592.jpg	Olga	Zieme	Lacy.Reynolds65@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-23	100	936.589.9077 x13905	1357 Nicolas Freeway	https://avatars.githubusercontent.com/u/17973803	Neha	Osinski	Titus_Marquardt1@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-24	42	227.477.3609 x350	11610 Treutel Forest	https://avatars.githubusercontent.com/u/12526808	Evie	Stoltenberg	Lavern29@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-25	17	(305) 481-9002	368 Koch Drive	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/769.jpg	Dalton	Kovacek	Retha_Goyette67@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-26	64	635-722-0226 x0431	601 Elm Road	https://avatars.githubusercontent.com/u/60398938	Dean	Bartoletti	Tessie58@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-27	58	546-328-7535 x5869	6172 Keebler Run	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1022.jpg	Elissa	Goodwin-Turcotte	Foster_OReilly@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-28	98	1-594-719-7936 x389	31558 Ronaldo Fields	https://avatars.githubusercontent.com/u/76164456	Uriah	Bauch	Camilla.Cormier-Morar@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-29	39	869-992-2857 x5275	4495 A Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1199.jpg	Ford	Bergnaum	Keshaun.Stoltenberg43@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-30	45	290.578.0641 x22355	6190 Harber Junctions	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/663.jpg	Hank	Abbott	Nannie.Hilll@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-31	96	317-469-7207 x515	761 Franecki Streets	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1165.jpg	Ciara	Senger	Rebeka_Keeling1@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-32	19	1-956-937-2268 x200	76289 McCullough View	https://avatars.githubusercontent.com/u/90957376	Hubert	Simonis	Harvey_Zieme@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-33	45	1-352-325-9431 x3335	93925 Spruce Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/663.jpg	Hank	Abbott	Nannie.Hilll@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-34	66	554.788.2301 x728	6077 Orchard Lane	https://avatars.githubusercontent.com/u/91666046	Velva	Schmeler	Torrance91@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-35	48	(755) 480-1630 x80188	9466 Maple Road	https://avatars.githubusercontent.com/u/87616605	Bernhard	Friesen	Wilhelm_Hoppe66@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-36	73	(708) 523-8794 x2520	501 Rutherford Flats	https://avatars.githubusercontent.com/u/13574280	Albertha	Turcotte	Madeline.Schumm62@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-37	31	735.409.5320	8305 W 2nd Street	https://avatars.githubusercontent.com/u/34392931	Claudie	Brakus	Alphonso_Mosciski98@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-38	97	951-374-9580 x94035	750 Deckow Trace	https://avatars.githubusercontent.com/u/9414723	Abigail	Hudson	Angelina.Schinner@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-39	47	920.567.9159	15813 Westgate	https://avatars.githubusercontent.com/u/94626541	Sherwood	Koelpin	Ova_Kshlerin@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-40	11	(317) 612-3089 x37752	930 Auer Estate	https://avatars.githubusercontent.com/u/93189657	Reilly	Weber	Green86@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-41	3	630-941-1571 x31143	828 Carroll Mountains	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1126.jpg	Clint	Fisher	Greta.Crona@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-42	5	253.541.2108 x04710	80947 MacGyver Meadow	https://avatars.githubusercontent.com/u/4100264	Andy	Doyle	Nathan_Ankunding78@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-43	37	807.405.8222 x964	263 Jackson Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/597.jpg	Ressie	Pfannerstill-Johnson	Makenna23@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-44	47	572.350.5644 x11886	671 Liberty Street	https://avatars.githubusercontent.com/u/94626541	Sherwood	Koelpin	Ova_Kshlerin@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-45	62	596-869-6286	55527 Kuphal Rapids	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1233.jpg	Percy	Greenfelder	Irwin.Crooks39@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-46	2	886-305-7792	8546 Brakus Green	https://avatars.githubusercontent.com/u/92325223	David	Wehner	Marcelina.Denesik47@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-47	89	367-781-0111	8978 Poplar Road	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/806.jpg	Nikolas	Welch	Quinton_Zieme@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-48	7	235-446-9452	143 Osinski Falls	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/816.jpg	Catharine	Rutherford	Lavern.Weimann-Herman@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-49	9	1-787-538-2675	553 Rae Locks	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/952.jpg	Francisco	Weissnat	Rhett.Walsh47@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-50	29	277.579.7853	871 Hermina Coves	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/97.jpg	Golden	Jacobi-Franecki	Felipe.Hettinger35@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-51	66	312.228.9033 x3531	64611 Clifford Ranch	https://avatars.githubusercontent.com/u/91666046	Velva	Schmeler	Torrance91@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-52	4	836-725-1691	72528 Shanie Bypass	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/706.jpg	Misty	Hauck	Adaline_Gorczany@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-53	66	755-507-9509 x47793	1205 Rebeca Manor	https://avatars.githubusercontent.com/u/91666046	Velva	Schmeler	Torrance91@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-54	8	646-375-8820 x90790	9118 Beatty Rest	https://avatars.githubusercontent.com/u/5207741	Audreanne	Mann	Hoyt_Nader79@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-55	78	(393) 581-7700 x672	314 Henri Fields	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/475.jpg	Amani	Kling	Annamarie.Mayer29@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-56	53	877-875-8895 x505	8007 Water Lane	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1070.jpg	Floyd	Swaniawski	Eliezer50@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-57	21	763.721.2128	6145 Miller Falls	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1046.jpg	Jeffrey	Keebler	Cicero.Braun@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-58	38	1-822-961-7171 x2399	88033 Emard Well	https://avatars.githubusercontent.com/u/90952367	Bell	Lebsack	Margaretta_Reichel@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-59	32	1-422-812-6105 x84862	5389 Springfield Close	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/199.jpg	Silas	Altenwerth	Olga84@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-60	63	273-296-7720 x92793	592 Dane Fords	https://avatars.githubusercontent.com/u/90381199	Nellie	Gutmann	Lilly.Auer44@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-61	49	454.465.3967 x675	994 School Close	https://avatars.githubusercontent.com/u/95807183	Patience	McKenzie	Reba_Willms@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-62	32	(288) 446-6852 x475	90193 Cedar Road	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/199.jpg	Silas	Altenwerth	Olga84@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-63	46	1-616-762-7536	98304 Chestnut Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/761.jpg	Wayne	Beahan	Sammie0@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-64	65	(641) 459-6776 x54924	27127 Anderson Rue	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1209.jpg	Jaida	Robel	Lavern.Pagac@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-65	22	1-735-219-4078	706 Ridge Road	https://avatars.githubusercontent.com/u/10970132	Bradly	Towne-Toy	Coy27@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-66	22	997.744.9714	54681 E 4th Avenue	https://avatars.githubusercontent.com/u/10970132	Bradly	Towne-Toy	Coy27@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-67	47	212.680.3762 x078	413 Hudson Key	https://avatars.githubusercontent.com/u/94626541	Sherwood	Koelpin	Ova_Kshlerin@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-68	65	969-383-4767	7777 E River Road	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1209.jpg	Jaida	Robel	Lavern.Pagac@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-69	3	1-616-395-2938 x74013	88788 Castle Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1126.jpg	Clint	Fisher	Greta.Crona@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-70	60	310.715.3224 x2665	1599 Dennis Estates	https://avatars.githubusercontent.com/u/77492088	Tyrese	Gutkowski	Sandy.Corkery@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-71	80	1-836-932-7976 x45871	38609 Lynch Valley	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/418.jpg	Verlie	Swift	Yadira_Farrell87@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-72	43	337-789-2833 x21232	9773 MacGyver Mews	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/686.jpg	Esperanza	Koepp	Shane_Marquardt80@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-73	48	(319) 261-5083 x878	6936 Russel Port	https://avatars.githubusercontent.com/u/87616605	Bernhard	Friesen	Wilhelm_Hoppe66@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-74	98	594.638.2015 x12580	27143 Kirk Villages	https://avatars.githubusercontent.com/u/76164456	Uriah	Bauch	Camilla.Cormier-Morar@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-75	97	1-414-528-7158 x822	324 Brown Harbors	https://avatars.githubusercontent.com/u/9414723	Abigail	Hudson	Angelina.Schinner@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-76	81	(314) 421-6050 x811	5268 Walker Valley	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/408.jpg	Maci	Rolfson	Jamie.Lind@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-77	21	1-698-638-0549	6366 Depot Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1046.jpg	Jeffrey	Keebler	Cicero.Braun@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-78	61	1-418-420-0147 x256	9052 Fisher Union	https://avatars.githubusercontent.com/u/16738659	Elvie	Schoen	Kyler.Kovacek44@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-79	39	1-724-638-6630 x5001	9381 Sanford Terrace	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1199.jpg	Ford	Bergnaum	Keshaun.Stoltenberg43@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-80	7	332.775.2873 x956	31465 Rosemarie Haven	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/816.jpg	Catharine	Rutherford	Lavern.Weimann-Herman@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-81	35	868.246.7527	455 Bogisich Fork	https://avatars.githubusercontent.com/u/91167686	Quinn	Pouros	Serenity.Schaefer39@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-82	75	373.787.5983	5956 Jones Freeway	https://avatars.githubusercontent.com/u/53804196	Jerrod	Oberbrunner	Candace.Beier@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-83	2	(311) 790-7060 x08206	25244 Railroad Street	https://avatars.githubusercontent.com/u/92325223	David	Wehner	Marcelina.Denesik47@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-84	92	941.926.6684	12529 Langosh Crossing	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/682.jpg	Lea	Gibson	Tracey.Lesch21@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-85	74	777.486.5444 x20676	5627 Pinfold Lane	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/982.jpg	Tillman	Champlin	Nya_Mitchell61@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-86	64	240.213.6051	924 The Causeway	https://avatars.githubusercontent.com/u/60398938	Dean	Bartoletti	Tessie58@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-87	55	1-950-452-6536 x4544	6169 Hintz Crossing	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/525.jpg	Joelle	Hauck	Stone_Moore18@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-88	42	697-390-0058 x08644	5327 W Market Street	https://avatars.githubusercontent.com/u/12526808	Evie	Stoltenberg	Lavern29@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-89	100	598.648.6154 x990	9822 Cruickshank Turnpike	https://avatars.githubusercontent.com/u/17973803	Neha	Osinski	Titus_Marquardt1@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-90	31	(488) 423-5471 x6265	47729 Adelle Coves	https://avatars.githubusercontent.com/u/34392931	Claudie	Brakus	Alphonso_Mosciski98@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-91	81	990.955.4398 x043	957 Kozey Parks	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/408.jpg	Maci	Rolfson	Jamie.Lind@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-92	21	1-381-487-7097 x64402	85686 Haleigh Ville	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1046.jpg	Jeffrey	Keebler	Cicero.Braun@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-93	93	(500) 560-4567 x76805	98621 County Line Road	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/125.jpg	Gabriel	Kautzer	Tyrel57@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-94	85	931.460.4428 x213	7435 Lincoln Street	https://avatars.githubusercontent.com/u/96685526	Leonardo	Hermann	Enid_Bernhard28@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-95	19	215.454.6611	64141 Schoen Parks	https://avatars.githubusercontent.com/u/90957376	Hubert	Simonis	Harvey_Zieme@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-96	34	555.508.0242 x09294	294 Andres Burg	https://avatars.githubusercontent.com/u/13174152	Christian	Hermiston	Constance_Collins39@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-97	67	489-776-3250 x4821	1590 McKenzie Knolls	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/781.jpg	Candice	Ryan	Hal.Lesch@yahoo.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-98	37	(819) 748-4583	2395 Lakin Falls	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/597.jpg	Ressie	Pfannerstill-Johnson	Makenna23@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-99	85	1-698-488-5856	397 First Avenue	https://avatars.githubusercontent.com/u/96685526	Leonardo	Hermann	Enid_Bernhard28@hotmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
-100	4	(797) 815-8495	76249 Consuelo Dam	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/706.jpg	Misty	Hauck	Adaline_Gorczany@gmail.com	2024-08-12 23:29:41.562+00	2024-08-12 23:29:41.562+00
+COPY public.contacts (id, "userId", "phoneNumber", address, avatar, "firstName", "lastName", email, "companyName", industry, "companyLogo", "companyDeals", "companyRevenue", "createdAt", "updatedAt") FROM stdin;
+1	35	1-876-232-1249	5800 River Road	https://avatars.githubusercontent.com/u/91167686	Quinn	Pouros	Serenity.Schaefer39@hotmail.com	Walter LLC	Entertainment	https://loremflickr.com/640/480/business-logo?lock=2063802342309888	86	184142	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+2	43	(988) 487-8984	24143 Jarred Viaduct	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/686.jpg	Esperanza	Koepp	Shane_Marquardt80@yahoo.com	Predovic, Thompson and Ward	Technology	https://loremflickr.com/640/480/business-logo?lock=4690969198854144	79	21732	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+3	42	1-206-789-8788	9237 Abernathy Pass	https://avatars.githubusercontent.com/u/12526808	Evie	Stoltenberg	Lavern29@hotmail.com	Corkery, Jacobi and Baumbach	Entertainment	https://loremflickr.com/640/480/business-logo?lock=5879272474411008	40	384479	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+4	83	722.889.8395 x51372	67174 Loy Spurs	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/604.jpg	Bo	Bradtke	Jarvis91@yahoo.com	Paucek, Witting and Conroy	Transportation	https://loremflickr.com/640/480/business-logo?lock=6519564686852096	31	637632	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+5	59	(502) 367-5201 x61373	97797 Kutch Meadow	https://avatars.githubusercontent.com/u/36948957	Magnolia	Mante	Wyman80@hotmail.com	Streich, McCullough and Yost	Energy	https://loremflickr.com/640/480/business-logo?lock=2017795866886144	66	977678	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+6	89	(432) 850-1473 x19978	24691 Malinda Glen	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/806.jpg	Nikolas	Welch	Quinton_Zieme@gmail.com	Wisoky Inc	Energy	https://loremflickr.com/640/480/business-logo?lock=4053247421579264	34	140279	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+7	44	455-200-0357 x00173	42051 Glenda Ranch	https://avatars.githubusercontent.com/u/76726314	Emmanuel	Torphy	Lauren52@hotmail.com	Yundt - Bayer	Transportation	https://loremflickr.com/640/480/business-logo?lock=1479335957495808	35	628726	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+8	45	325-289-3003	91547 Kaylie Union	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/663.jpg	Hank	Abbott	Nannie.Hilll@gmail.com	Rolfson, Hickle and Jenkins	Education	https://loremflickr.com/640/480/business-logo?lock=87406684405760	71	605189	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+9	3	920.885.3211 x914	890 Bill Burg	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1126.jpg	Clint	Fisher	Greta.Crona@gmail.com	McDermott - Prohaska	Entertainment	https://loremflickr.com/640/480/business-logo?lock=5545844497448960	3	521009	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+10	36	1-382-315-0765 x0333	388 Smith Street	https://avatars.githubusercontent.com/u/10148991	Ray	Boyer	Declan30@yahoo.com	Anderson - Morissette	Healthcare	https://loremflickr.com/640/480/business-logo?lock=3517181658660864	42	142229	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+11	89	(593) 516-6332	4955 Jast Lodge	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/806.jpg	Nikolas	Welch	Quinton_Zieme@gmail.com	Cassin Group	Energy	https://loremflickr.com/640/480/business-logo?lock=1708916513701888	78	290533	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+12	39	502.229.5907	94967 Jenkins Dale	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1199.jpg	Ford	Bergnaum	Keshaun.Stoltenberg43@hotmail.com	Jaskolski - Maggio	Retail	https://loremflickr.com/640/480/business-logo?lock=79953576067072	41	986293	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+13	58	(615) 976-4127 x85477	8729 Springfield Road	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1022.jpg	Elissa	Goodwin-Turcotte	Foster_OReilly@yahoo.com	Stanton LLC	Transportation	https://loremflickr.com/640/480/business-logo?lock=3633731090776064	38	316603	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+14	28	1-993-298-7253 x8797	4852 S 8th Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/731.jpg	Shanelle	Casper	Malinda.Predovic@hotmail.com	Koss, Zemlak and Klocko	Retail	https://loremflickr.com/640/480/business-logo?lock=882508514197504	41	158382	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+15	26	1-793-876-5223 x9904	6192 Rebeca Run	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1008.jpg	Colton	McKenzie	Veronica4@gmail.com	Cummerata, Weissnat and Crist	Entertainment	https://loremflickr.com/640/480/business-logo?lock=2179296521093120	3	292647	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+16	79	815-915-3784 x9948	2503 Lake Avenue	https://avatars.githubusercontent.com/u/64312576	Jedidiah	Strosin	Herminia_Fritsch@hotmail.com	Zboncak Inc	Technology	https://loremflickr.com/640/480/business-logo?lock=612779836833792	37	129701	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+17	12	833-732-3306 x50099	4380 Kirlin Island	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/114.jpg	Mattie	Hickle	Laron2@hotmail.com	Okuneva, Larkin and Prosacco	Finance	https://loremflickr.com/640/480/business-logo?lock=6887273274540032	50	493838	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+18	52	1-663-234-5929 x09964	3871 Rosalyn Hollow	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1203.jpg	Zachery	Balistreri	Manuel_Bins17@hotmail.com	Effertz - Langworth	Technology	https://loremflickr.com/640/480/business-logo?lock=4532401168449536	42	118080	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+19	23	911.769.9155	6063 Gusikowski Gardens	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/239.jpg	Frances	Kunze	Hulda38@gmail.com	Senger, Ullrich and Schowalter	Energy	https://loremflickr.com/640/480/business-logo?lock=162955817648128	19	72007	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+20	56	1-314-749-1631 x94302	5197 Orion Course	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/911.jpg	Keon	Satterfield	Devin24@hotmail.com	Bosco and Sons	Transportation	https://loremflickr.com/640/480/business-logo?lock=3701223182041088	85	297584	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+21	18	861-271-7996 x459	21340 Koss Place	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/210.jpg	Treva	Spencer	Kayden_Hintz@gmail.com	Reilly Group	Technology	https://loremflickr.com/640/480/business-logo?lock=1120448425230336	25	587317	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+22	75	(630) 494-4072 x79253	46389 Flatley Place	https://avatars.githubusercontent.com/u/53804196	Jerrod	Oberbrunner	Candace.Beier@hotmail.com	Purdy Inc	Finance	https://loremflickr.com/640/480/business-logo?lock=3516435993198592	99	967757	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+23	34	630.490.4293 x9298	926 Bramble Close	https://avatars.githubusercontent.com/u/13174152	Christian	Hermiston	Constance_Collins39@yahoo.com	Stroman - D'Amore	Real Estate	https://loremflickr.com/640/480/business-logo?lock=7443767462199296	56	742302	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+24	7	463.424.2962 x9560	879 Adams Avenue	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/816.jpg	Catharine	Rutherford	Lavern.Weimann-Herman@gmail.com	Berge LLC	Technology	https://loremflickr.com/640/480/business-logo?lock=2977792606076928	69	146733	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+25	28	391.978.8393	15435 Green Extension	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/731.jpg	Shanelle	Casper	Malinda.Predovic@hotmail.com	White Group	Energy	https://loremflickr.com/640/480/business-logo?lock=702010768752640	73	504374	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+26	62	(652) 515-5123 x398	566 Spinka Brooks	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1233.jpg	Percy	Greenfelder	Irwin.Crooks39@gmail.com	Simonis Inc	Real Estate	https://loremflickr.com/640/480/business-logo?lock=4307883162337280	63	738585	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+27	40	208.309.8480 x001	4094 Cassidy Lock	https://avatars.githubusercontent.com/u/58152953	Enid	Harvey	Mabel.Littel20@gmail.com	Johnson - Pfeffer	Finance	https://loremflickr.com/640/480/business-logo?lock=4304248013586432	64	337731	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+28	76	(888) 331-1964 x409	3434 S Franklin Street	https://avatars.githubusercontent.com/u/21194323	Maximillia	Buckridge	Markus.Moen92@yahoo.com	Dickens - Boehm	Finance	https://loremflickr.com/640/480/business-logo?lock=134387584729088	31	689510	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+29	25	247.757.4448 x104	73641 Isaias Manor	https://avatars.githubusercontent.com/u/17320848	Jasper	Raynor-McKenzie	Demetrius.Reynolds37@hotmail.com	Smitham, Goyette and Deckow	Entertainment	https://loremflickr.com/640/480/business-logo?lock=433280272826368	49	568987	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+30	6	973.542.2789 x0789	918 Moor Lane	https://avatars.githubusercontent.com/u/82295148	Tristin	Bartell	Nathan_Kuvalis@yahoo.com	Kerluke Group	Technology	https://loremflickr.com/640/480/business-logo?lock=3901979459846144	62	361394	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+31	87	1-339-241-8907 x345	8582 Romaguera Fall	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1116.jpg	Aiden	Grimes	Joesph.Emmerich@yahoo.com	Schamberger Group	Finance	https://loremflickr.com/640/480/business-logo?lock=5457393072734208	28	197232	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+32	76	1-481-301-9718	5235 Wilderman Valleys	https://avatars.githubusercontent.com/u/21194323	Maximillia	Buckridge	Markus.Moen92@yahoo.com	Dach, Labadie and Weber	Retail	https://loremflickr.com/640/480/business-logo?lock=6413034050289664	35	604547	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+33	22	685.693.0483 x9098	192 Ward Greens	https://avatars.githubusercontent.com/u/10970132	Bradly	Towne-Toy	Coy27@yahoo.com	Renner Group	Education	https://loremflickr.com/640/480/business-logo?lock=7913335194386432	62	555683	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+34	41	(319) 326-6280 x388	81262 Ben Garden	https://avatars.githubusercontent.com/u/3473539	Telly	Bode	Joelle_Greenholt@hotmail.com	Corkery, Carroll and Ryan	Healthcare	https://loremflickr.com/640/480/business-logo?lock=3826694146228224	27	191501	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+35	26	1-299-211-4654 x668	56551 Conn Pines	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1008.jpg	Colton	McKenzie	Veronica4@gmail.com	McKenzie Inc	Technology	https://loremflickr.com/640/480/business-logo?lock=6616090476019712	32	43013	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+36	3	1-694-310-0736 x975	823 Otilia Mountain	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1126.jpg	Clint	Fisher	Greta.Crona@gmail.com	Upton Group	Healthcare	https://loremflickr.com/640/480/business-logo?lock=827686624690176	54	310951	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+37	94	(739) 467-4289 x2097	9328 Joannie Freeway	https://avatars.githubusercontent.com/u/66095369	Elisabeth	Prohaska	Jasmin_Flatley92@hotmail.com	Reichel - Rau	Retail	https://loremflickr.com/640/480/business-logo?lock=2306750296358912	8	721489	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+38	34	1-846-266-2071 x319	59953 E Park Avenue	https://avatars.githubusercontent.com/u/13174152	Christian	Hermiston	Constance_Collins39@yahoo.com	Wolff - Hermiston	Technology	https://loremflickr.com/640/480/business-logo?lock=7893899618025472	20	655485	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+39	33	(739) 613-3810	79421 N Central Avenue	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/740.jpg	Gabe	Schneider	Larue_Lehner79@gmail.com	Ondricka, Pfeffer and Greenfelder	Manufacturing	https://loremflickr.com/640/480/business-logo?lock=8440047783116800	52	945778	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+40	92	844-434-3631 x0538	615 E 5th Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/682.jpg	Lea	Gibson	Tracey.Lesch21@gmail.com	Tromp LLC	Technology	https://loremflickr.com/640/480/business-logo?lock=4338491416641536	34	359062	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+41	94	426-418-6116 x0468	1031 King Wall	https://avatars.githubusercontent.com/u/66095369	Elisabeth	Prohaska	Jasmin_Flatley92@hotmail.com	Turcotte LLC	Real Estate	https://loremflickr.com/640/480/business-logo?lock=8330867055263744	2	329601	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+42	49	1-817-399-8442 x2633	30492 Harrison Street	https://avatars.githubusercontent.com/u/95807183	Patience	McKenzie	Reba_Willms@yahoo.com	Hansen - Jacobs	Education	https://loremflickr.com/640/480/business-logo?lock=5356759501766656	16	188209	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+43	38	(953) 450-8887 x5596	5035 Farm Close	https://avatars.githubusercontent.com/u/90952367	Bell	Lebsack	Margaretta_Reichel@yahoo.com	Simonis Inc	Retail	https://loremflickr.com/640/480/business-logo?lock=6905934458650624	56	478573	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+44	17	660-218-6069 x9514	6584 Drew Cove	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/769.jpg	Dalton	Kovacek	Retha_Goyette67@hotmail.com	Keeling - Grant	Technology	https://loremflickr.com/640/480/business-logo?lock=2456069922095104	1	686786	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+45	99	(887) 445-2960 x82964	6516 Witting Gardens	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/456.jpg	Susie	Schumm	Felicity.Wintheiser48@yahoo.com	Streich, Kemmer and Glover	Finance	https://loremflickr.com/640/480/business-logo?lock=2442480687513600	28	422217	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+46	8	302.878.2244 x14419	6587 Hellen Village	https://avatars.githubusercontent.com/u/5207741	Audreanne	Mann	Hoyt_Nader79@gmail.com	Lind Group	Manufacturing	https://loremflickr.com/640/480/business-logo?lock=4173005034881024	66	460501	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+47	62	(862) 745-4984	20734 Wunsch Via	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1233.jpg	Percy	Greenfelder	Irwin.Crooks39@gmail.com	Koelpin - Cassin	Transportation	https://loremflickr.com/640/480/business-logo?lock=4990814690213888	81	713876	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+48	57	708-250-2478 x8511	2336 Moriah Place	https://avatars.githubusercontent.com/u/31125969	Juliana	Goldner	Mathew96@hotmail.com	Rowe, Conn and Feest	Healthcare	https://loremflickr.com/640/480/business-logo?lock=1726722479226880	82	241520	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+49	84	502.722.9236	882 The Mews	https://avatars.githubusercontent.com/u/84119797	Agustina	Wiegand	Rafael.Erdman35@yahoo.com	Kilback - Sporer	Retail	https://loremflickr.com/640/480/business-logo?lock=781937356570624	49	474778	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+50	95	1-306-851-8258	986 Marcia Viaduct	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/343.jpg	Philip	Jacobson	Magnus.Hoppe@hotmail.com	Moore, Breitenberg and Lynch	Entertainment	https://loremflickr.com/640/480/business-logo?lock=7823628871663616	18	597169	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+51	52	361-403-4919 x8587	813 Pollich Bypass	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1203.jpg	Zachery	Balistreri	Manuel_Bins17@hotmail.com	Mante, Shanahan and Legros	Entertainment	https://loremflickr.com/640/480/business-logo?lock=7216726299115520	11	445140	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+52	46	(683) 744-6042 x155	66907 Willow Road	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/761.jpg	Wayne	Beahan	Sammie0@gmail.com	Smith - Goyette	Manufacturing	https://loremflickr.com/640/480/business-logo?lock=6606091448221696	0	500828	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+53	48	1-919-259-5101 x25406	62436 E Jefferson Street	https://avatars.githubusercontent.com/u/87616605	Bernhard	Friesen	Wilhelm_Hoppe66@yahoo.com	King, Stamm and Rogahn	Technology	https://loremflickr.com/640/480/business-logo?lock=8216338396872704	11	756879	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+54	25	892-897-1664	8368 Gordon Road	https://avatars.githubusercontent.com/u/17320848	Jasper	Raynor-McKenzie	Demetrius.Reynolds37@hotmail.com	Zulauf and Sons	Education	https://loremflickr.com/640/480/business-logo?lock=2274063179317248	13	532101	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+55	69	960.536.3046 x000	436 Waterloo Road	https://avatars.githubusercontent.com/u/83622999	Devin	Grant-Gulgowski	Lucie_Homenick36@yahoo.com	Hegmann Group	Healthcare	https://loremflickr.com/640/480/business-logo?lock=7906207043944448	78	184035	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+56	57	807-945-7929 x888	1476 Walker Highway	https://avatars.githubusercontent.com/u/31125969	Juliana	Goldner	Mathew96@hotmail.com	Murazik Group	Real Estate	https://loremflickr.com/640/480/business-logo?lock=2059431409876992	5	220223	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+57	92	481-948-3254 x079	4646 S 1st Avenue	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/682.jpg	Lea	Gibson	Tracey.Lesch21@gmail.com	Denesik - Hoppe	Real Estate	https://loremflickr.com/640/480/business-logo?lock=8860387411755008	78	678323	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+58	66	656-206-3165 x363	82648 Baumbach Walk	https://avatars.githubusercontent.com/u/91666046	Velva	Schmeler	Torrance91@gmail.com	Kautzer - Braun	Retail	https://loremflickr.com/640/480/business-logo?lock=3337989384044544	77	287585	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+59	56	590.624.7293 x25502	6638 Iva Lights	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/911.jpg	Keon	Satterfield	Devin24@hotmail.com	Frami - Hilll	Retail	https://loremflickr.com/640/480/business-logo?lock=455936778960896	23	727959	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+60	40	1-565-285-2097 x1012	70456 Prospect Place	https://avatars.githubusercontent.com/u/58152953	Enid	Harvey	Mabel.Littel20@gmail.com	Fay, Towne and Smitham	Technology	https://loremflickr.com/640/480/business-logo?lock=4496043555160064	25	237099	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+61	83	(764) 201-7167 x37279	6591 Charles Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/604.jpg	Bo	Bradtke	Jarvis91@yahoo.com	Tremblay, Stoltenberg and Rogahn	Energy	https://loremflickr.com/640/480/business-logo?lock=3283284765179904	56	900748	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+62	8	(237) 580-9240 x74614	8589 W Church Street	https://avatars.githubusercontent.com/u/5207741	Audreanne	Mann	Hoyt_Nader79@gmail.com	Windler - Welch	Finance	https://loremflickr.com/640/480/business-logo?lock=7453558142140416	17	283376	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+63	73	252.642.9885 x70024	293 Blanda Lodge	https://avatars.githubusercontent.com/u/13574280	Albertha	Turcotte	Madeline.Schumm62@hotmail.com	Denesik - Kuvalis	Finance	https://loremflickr.com/640/480/business-logo?lock=1994219851874304	73	138886	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+64	2	565-261-2984	6283 Schumm Gardens	https://avatars.githubusercontent.com/u/92325223	David	Wehner	Marcelina.Denesik47@yahoo.com	Ernser Inc	Healthcare	https://loremflickr.com/640/480/business-logo?lock=7424125068902400	68	933720	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+65	80	563-467-9666	49339 Tristin Light	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/418.jpg	Verlie	Swift	Yadira_Farrell87@gmail.com	Brekke, Maggio and Tromp	Retail	https://loremflickr.com/640/480/business-logo?lock=3293159452835840	72	147385	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+66	92	721.233.6358 x184	76536 S Monroe Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/682.jpg	Lea	Gibson	Tracey.Lesch21@gmail.com	Streich Inc	Real Estate	https://loremflickr.com/640/480/business-logo?lock=5729961275031552	38	287558	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+67	86	(594) 848-8954 x6881	597 Manor Way	https://avatars.githubusercontent.com/u/67149936	Kyla	Schneider-Braun	Clay.Harvey97@hotmail.com	Ryan, Hand and Fahey	Entertainment	https://loremflickr.com/640/480/business-logo?lock=5934082886205440	88	114875	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+68	99	(562) 427-1882 x660	423 Monroe Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/456.jpg	Susie	Schumm	Felicity.Wintheiser48@yahoo.com	Auer, Blick and Hessel	Entertainment	https://loremflickr.com/640/480/business-logo?lock=4163909936218112	80	949328	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+69	16	312.846.2152 x90193	3108 Cordell Valleys	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/652.jpg	Joanne	Shields	Jewell_Pfannerstill4@hotmail.com	Barton, Mayer and Mueller	Manufacturing	https://loremflickr.com/640/480/business-logo?lock=223293200138240	8	14382	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+70	96	334-419-3689 x7106	6103 Goyette Parkway	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1165.jpg	Ciara	Senger	Rebeka_Keeling1@yahoo.com	Hahn, Emard and Schuppe	Healthcare	https://loremflickr.com/640/480/business-logo?lock=4544316752003072	37	579251	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+71	51	276.991.8836 x737	7803 S Broadway Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/822.jpg	Linda	Terry	Hollie.Dach33@yahoo.com	Balistreri - Thompson	Education	https://loremflickr.com/640/480/business-logo?lock=1253492052197376	73	69729	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+72	100	633.869.6772 x689	476 Virginie Burgs	https://avatars.githubusercontent.com/u/17973803	Neha	Osinski	Titus_Marquardt1@hotmail.com	Greenfelder Group	Technology	https://loremflickr.com/640/480/business-logo?lock=3200287231705088	13	911444	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+73	16	526.481.7373 x8867	80012 E Broadway	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/652.jpg	Joanne	Shields	Jewell_Pfannerstill4@hotmail.com	Hilpert - Nienow	Healthcare	https://loremflickr.com/640/480/business-logo?lock=1001817645252608	93	841285	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+74	25	961.536.4530	884 Feest Ridges	https://avatars.githubusercontent.com/u/17320848	Jasper	Raynor-McKenzie	Demetrius.Reynolds37@hotmail.com	Koelpin Group	Manufacturing	https://loremflickr.com/640/480/business-logo?lock=2519383779835904	2	739340	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+75	83	(688) 349-6182 x5104	1221 Viola Fork	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/604.jpg	Bo	Bradtke	Jarvis91@yahoo.com	Kemmer LLC	Retail	https://loremflickr.com/640/480/business-logo?lock=3841703423246336	43	259311	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+76	84	874.778.8884 x141	568 7th Street	https://avatars.githubusercontent.com/u/84119797	Agustina	Wiegand	Rafael.Erdman35@yahoo.com	Weimann Group	Healthcare	https://loremflickr.com/640/480/business-logo?lock=4151333479251968	35	999187	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+77	32	837.819.4866	589 Eliezer Valleys	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/199.jpg	Silas	Altenwerth	Olga84@gmail.com	Kuhn - Upton	Technology	https://loremflickr.com/640/480/business-logo?lock=1745656030953472	28	64918	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+78	28	(660) 872-0578	70852 Wisozk Rue	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/731.jpg	Shanelle	Casper	Malinda.Predovic@hotmail.com	Bradtke and Sons	Retail	https://loremflickr.com/640/480/business-logo?lock=3008376753618944	90	210654	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+79	10	464-227-2644 x97227	2367 Melany Highway	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/713.jpg	Mabelle	Weber	Effie.Nienow99@gmail.com	Bechtelar - Satterfield	Healthcare	https://loremflickr.com/640/480/business-logo?lock=746105824346112	36	45457	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+80	87	565.745.6460 x028	8477 Bette Rapids	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1116.jpg	Aiden	Grimes	Joesph.Emmerich@yahoo.com	Crist LLC	Technology	https://loremflickr.com/640/480/business-logo?lock=2115335387873280	75	30809	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+81	83	(334) 865-4551 x4759	8692 Haag Hill	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/604.jpg	Bo	Bradtke	Jarvis91@yahoo.com	Mann, Bergnaum and Dickinson	Manufacturing	https://loremflickr.com/640/480/business-logo?lock=6454901949333504	87	827236	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+82	90	905-389-1355 x72427	650 Boundary Road	https://avatars.githubusercontent.com/u/85636848	Karina	Stroman	Eliezer_Aufderhar13@yahoo.com	Maggio Inc	Retail	https://loremflickr.com/640/480/business-logo?lock=5305160079245312	63	602460	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+83	49	(607) 615-6076 x455	15097 Lane Village	https://avatars.githubusercontent.com/u/95807183	Patience	McKenzie	Reba_Willms@yahoo.com	Casper Group	Education	https://loremflickr.com/640/480/business-logo?lock=3219973252055040	53	66174	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+84	18	680-215-5380 x9450	6573 Brice Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/210.jpg	Treva	Spencer	Kayden_Hintz@gmail.com	Greenholt - Hackett	Technology	https://loremflickr.com/640/480/business-logo?lock=220705438302208	25	967381	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+85	49	290-587-5885	97177 Keebler Hills	https://avatars.githubusercontent.com/u/95807183	Patience	McKenzie	Reba_Willms@yahoo.com	Feil, Lang and Christiansen	Technology	https://loremflickr.com/640/480/business-logo?lock=1841522311954432	96	415215	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+86	96	(725) 797-0780	379 E Water Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1165.jpg	Ciara	Senger	Rebeka_Keeling1@yahoo.com	Keeling, Beer and Mante	Technology	https://loremflickr.com/640/480/business-logo?lock=670200508710912	11	4969	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+87	6	(769) 284-5045 x95319	95376 St George's Road	https://avatars.githubusercontent.com/u/82295148	Tristin	Bartell	Nathan_Kuvalis@yahoo.com	Kautzer, Kris and Pouros	Technology	https://loremflickr.com/640/480/business-logo?lock=2813930676158464	34	277661	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+88	25	558-368-6146 x890	7058 E River Road	https://avatars.githubusercontent.com/u/17320848	Jasper	Raynor-McKenzie	Demetrius.Reynolds37@hotmail.com	O'Reilly - Baumbach	Technology	https://loremflickr.com/640/480/business-logo?lock=1786071402676224	66	636871	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+89	90	399-411-4885 x0597	7778 Roman Way	https://avatars.githubusercontent.com/u/85636848	Karina	Stroman	Eliezer_Aufderhar13@yahoo.com	Hirthe, Bergstrom and Littel	Energy	https://loremflickr.com/640/480/business-logo?lock=645143218618368	40	771182	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+90	54	644.916.1088 x52354	304 Ryley Estate	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/598.jpg	Kris	Runolfsdottir	Vicenta.Klein@gmail.com	Hauck LLC	Entertainment	https://loremflickr.com/640/480/business-logo?lock=8934977674674176	94	886331	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+91	2	(501) 925-6651 x2200	358 Elisabeth Greens	https://avatars.githubusercontent.com/u/92325223	David	Wehner	Marcelina.Denesik47@yahoo.com	Johnston LLC	Energy	https://loremflickr.com/640/480/business-logo?lock=6789814722494464	88	764810	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+92	68	(914) 988-1079 x74076	53815 Alma Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/212.jpg	Zaria	Huel	Alexander.Schaden5@hotmail.com	Hermann LLC	Real Estate	https://loremflickr.com/640/480/business-logo?lock=4898381180698624	13	541324	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+93	31	1-549-313-0510 x7477	56085 Hane Club	https://avatars.githubusercontent.com/u/34392931	Claudie	Brakus	Alphonso_Mosciski98@yahoo.com	Grady - Koepp	Finance	https://loremflickr.com/640/480/business-logo?lock=3536892733685760	28	339652	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+94	41	1-275-279-4785 x163	3624 Lang Avenue	https://avatars.githubusercontent.com/u/3473539	Telly	Bode	Joelle_Greenholt@hotmail.com	Powlowski, McCullough and Ferry	Energy	https://loremflickr.com/640/480/business-logo?lock=8605754565066752	74	808701	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+95	17	247-355-6643	27230 Cayla View	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/769.jpg	Dalton	Kovacek	Retha_Goyette67@hotmail.com	Streich Inc	Energy	https://loremflickr.com/640/480/business-logo?lock=1227155694419968	70	253993	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+96	68	621-572-2710	342 Castle Street	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/212.jpg	Zaria	Huel	Alexander.Schaden5@hotmail.com	Daugherty, Bosco and Altenwerth	Education	https://loremflickr.com/640/480/business-logo?lock=7539463546732544	70	135266	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+97	43	452-247-5701 x253	495 Klocko Flat	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/686.jpg	Esperanza	Koepp	Shane_Marquardt80@yahoo.com	Bednar Group	Energy	https://loremflickr.com/640/480/business-logo?lock=5403420013887488	66	321213	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+98	39	1-836-876-5411 x0024	597 Morar Via	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1199.jpg	Ford	Bergnaum	Keshaun.Stoltenberg43@hotmail.com	Schoen, Halvorson and Greenfelder	Technology	https://loremflickr.com/640/480/business-logo?lock=2041143221026816	18	727216	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+99	40	956-986-1521	38715 Lake Drive	https://avatars.githubusercontent.com/u/58152953	Enid	Harvey	Mabel.Littel20@gmail.com	Hessel, Bergnaum and Lockman	Real Estate	https://loremflickr.com/640/480/business-logo?lock=1651789550059520	63	50504	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+100	50	917-744-0804 x6880	61033 Margret Place	https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/654.jpg	Pierce	Upton	Jessica_Spencer@yahoo.com	Bernier Inc	Finance	https://loremflickr.com/640/480/business-logo?lock=7216794875985920	17	466323	2024-08-13 07:50:39.18+00	2024-08-13 07:50:39.18+00
+\.
+
+
+--
+-- Data for Name: interactions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.interactions (id, "contactId", type, date, notes, "createdAt", "updatedAt") FROM stdin;
+1	76	deal	2024-08-26 22:37:07.072+00	Caute comes enim vulariter numquam vehemens angulus.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+2	36	meeting	2024-08-29 08:59:22.579+00	Tamdiu vesco depromo statua cupiditate constans.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+3	66	deal	2024-08-10 19:12:51.978+00	Concido aequitas valde deinde vel amicitia arca celebrer viscus.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+4	72	deal	2024-08-09 03:49:22.731+00	Vitium tunc utor advenio.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+5	75	email	2024-08-28 15:02:26.921+00	Vinum arceo tristis sono ulterius adulescens abbas.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+6	12	call	2024-08-09 13:00:42.452+00	Ulciscor terreo dicta earum vapulus.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+7	43	call	2024-08-19 10:58:18.669+00	Spes deleo coniecto ullus patior ascit.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+8	81	email	2024-08-28 15:42:17.788+00	Hic sperno vix.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+9	51	call	2024-08-14 12:28:42.074+00	Ultio statim turba coruscus pariatur summisse super adiuvo cupiditas.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+10	66	email	2024-08-30 20:46:39.271+00	Demergo cibo incidunt amo artificiose ulciscor vomica soleo libero desolo.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+11	56	call	2024-08-03 23:00:04.363+00	Amitto viriliter sumptus et quisquam tubineus tabula acervus.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+12	59	other	2024-08-04 06:43:08.296+00	Tametsi curis tantillus illo.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+13	72	call	2024-08-20 05:24:19.406+00	Blanditiis enim thermae aranea calculus.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+14	65	email	2024-08-08 11:23:23.203+00	Taedium sublime angustus bis aspernatur tripudio circumvenio tepesco patrocinor studio.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+15	48	deal	2024-08-05 08:07:49.415+00	Nemo censura vita tantum.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+16	71	deal	2024-08-17 09:11:43.159+00	Tres sumo vulariter necessitatibus audax dens desidero.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+17	1	other	2024-08-21 03:51:15.575+00	Constans abscido bestia peior studio totidem crustulum sapiente denuo.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+18	41	meeting	2024-08-05 01:46:16.941+00	Demens tantillus trado somnus subvenio.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+19	14	meeting	2024-08-28 11:31:33.519+00	Advenio calco adfero.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
+20	83	call	2024-08-09 19:40:23.079+00	Demulceo aeger attero candidus teneo super cunctatio sortitus teres deleo.	2024-08-13 16:24:08.846+00	2024-08-13 16:24:08.846+00
 \.
 
 
@@ -533,6 +615,13 @@ SELECT pg_catalog.setval('public.contacts_id_seq', 100, true);
 
 
 --
+-- Name: interactions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.interactions_id_seq', 20, true);
+
+
+--
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -545,6 +634,14 @@ SELECT pg_catalog.setval('public.users_id_seq', 100, true);
 
 ALTER TABLE ONLY public.contacts
     ADD CONSTRAINT contacts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: interactions interactions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.interactions
+    ADD CONSTRAINT interactions_pkey PRIMARY KEY (id);
 
 
 --
@@ -577,6 +674,14 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.contacts
     ADD CONSTRAINT "contacts_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: interactions interactions_contactId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.interactions
+    ADD CONSTRAINT "interactions_contactId_fkey" FOREIGN KEY ("contactId") REFERENCES public.contacts(id);
 
 
 --

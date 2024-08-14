@@ -19,7 +19,7 @@ const Interaction = sequelize.define('Interaction', {
   date: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: DataTypes.NOW, // Fecha por defecto a la fecha y hora actuales
+    defaultValue: DataTypes.NOW,
   },
   notes: {
     type: DataTypes.TEXT,
