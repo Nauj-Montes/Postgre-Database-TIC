@@ -63,6 +63,13 @@ async function deleteContact(id) {
       throw boom.notFound("Contact not found");
     }
 
+    // Check if interactions exist for the contact
+    const interactions = await Interaction.findAll({ where: { contactId: id } });
+    if (interactions.length > 0) {
+      // Delete related interactions first
+      await Interaction.destroy({ where: { contactId: id } });
+    }
+
     // Now delete the contact
     await contact.destroy();
     return { message: "Contact deleted successfully" };

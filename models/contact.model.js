@@ -54,3 +54,4 @@ const Contact = sequelize.define('Contact', {
 });
 
 module.exports = Contact;
+
