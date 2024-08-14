@@ -1,4 +1,5 @@
 const Contact = require("../models/contact.model");
+const Interaction = require("../models/interaction.model");
 const boom = require("@hapi/boom");
 
 // Get all contacts
@@ -7,6 +8,7 @@ async function getAllContacts() {
     const contacts = await Contact.findAll();
     return contacts;
   } catch (error) {
+    console.error('Error retrieving contacts:', error); // Log the error details
     throw boom.internal("Error retrieving contacts", error);
   }
 }
@@ -19,6 +21,8 @@ async function createContact(data) {
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
       throw boom.conflict("Email already exists", error);
+    } else if (error.name === "SequelizeValidationError") {
+      throw boom.badData("Validation error", error);
     }
     throw boom.badData("Error creating contact", error);
   }
@@ -58,9 +62,12 @@ async function deleteContact(id) {
     if (!contact) {
       throw boom.notFound("Contact not found");
     }
+
+    // Now delete the contact
     await contact.destroy();
     return { message: "Contact deleted successfully" };
   } catch (error) {
+    console.error('Error deleting contact:', error); // Log the error details
     throw boom.internal("Error deleting contact", error);
   }
 }

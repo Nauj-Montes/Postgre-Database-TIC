@@ -1,22 +1,10 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/sequelize');
-const User = require('./user.model');
 
 const Contact = sequelize.define('Contact', {
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: User,
-      key: 'id',
-    },
-  },
   phoneNumber: {
     type: DataTypes.STRING,
-    allowNull: true,
-    validate: {
-      is: /^(?:1-)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}(?:\s*x\d{1,5})?$/i,
-    },
+    allowNull: false,
   },
   address: {
     type: DataTypes.STRING,
@@ -24,29 +12,45 @@ const Contact = sequelize.define('Contact', {
   },
   avatar: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   firstName: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   lastName: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
     validate: {
       isEmail: true,
     },
   },
+  companyName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  industry: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  companyLogo: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  companyDeals: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  companyRevenue: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
 }, {
-  timestamps: true,
-  tableName: 'contacts',
+  tableName: 'contacts', // Specify the table name here
 });
-
-User.hasOne(Contact, { foreignKey: 'userId' });
-Contact.belongsTo(User, { foreignKey: 'userId' });
 
 module.exports = Contact;

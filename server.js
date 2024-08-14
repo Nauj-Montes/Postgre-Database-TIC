@@ -7,7 +7,7 @@ const salesRoutes = require("./routes/sales.routes");
 const { logErrors, boomErrorHandler, errorHandler } = require('./middlewares/error.handler');
 
 const app = express();
-const port = 5000;
+const port = 3000;
 
 const corsOptions = {
   origin: '*',

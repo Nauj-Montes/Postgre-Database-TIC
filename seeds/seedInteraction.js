@@ -3,7 +3,7 @@ const sequelize = require('../config/sequelize');
 const Interaction = require('../models/interaction.model');
 const Contact = require('../models/contact.model');
 
-const interactionTypes = ['email', 'call', 'purchase'];
+const interactionTypes = ['email', 'call', 'deal', 'meeting', 'other'];
 
 async function seedInteractions() {
   try {
@@ -21,7 +21,8 @@ async function seedInteractions() {
       const interaction = {
         contactId: randomContact.id,
         type: randomType,
-        date: new Date(),
+        /* I want a random date from august 1 to august 31 of 2024 */
+        date: faker.date.between('2024-08-01', '2024-08-31'),
         notes: faker.lorem.sentence(),
       };
 

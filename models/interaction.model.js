@@ -13,13 +13,13 @@ const Interaction = sequelize.define('Interaction', {
     },
   },
   type: {
-    type: DataTypes.ENUM('email', 'call', 'purchase'),
+    type: DataTypes.ENUM('email', 'call', 'deal', 'meeting', 'other'),
     allowNull: false,
   },
   date: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: DataTypes.NOW, // Fecha por defecto a la fecha y hora actuales
+    defaultValue: DataTypes.NOW,
   },
   notes: {
     type: DataTypes.TEXT,
