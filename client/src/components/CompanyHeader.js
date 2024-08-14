@@ -33,7 +33,12 @@ const StyledCompanyHeader = styled.div`
   }
 `;
 
-function CompanyHeader({ refreshCompanies, setViewMode, setSearchQuery }) {
+function CompanyHeader({
+  refreshCompanies,
+  setViewMode,
+  setSearchQuery,
+  onAddNewCompany,
+}) {
   const [company, setCompany] = useState({
     name: "",
     industry: "",
@@ -56,7 +61,7 @@ function CompanyHeader({ refreshCompanies, setViewMode, setSearchQuery }) {
 
   return (
     <StyledCompanyHeader>
-      <Button type="primary" icon={<PlusOutlined />} onClick={handleSubmit}>
+      <Button type="primary" icon={<PlusOutlined />} onClick={onAddNewCompany}>
         Add New Company
       </Button>
       <Space>

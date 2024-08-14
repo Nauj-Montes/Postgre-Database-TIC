@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Typography, Alert } from "antd";
+import { Layout, Typography, Alert, notification } from "antd";
 import CompanyHeader from "../components/CompanyHeader";
 import CompanyList from "../components/CompanyList";
 import CompanyGrid from "../components/CompanyGrid";
-/* import CompanyDrawer from "../components/CompanyDrawer"; */
-import contactService from "../services/contactService"; // Updated import
+import CompanyDrawer from "../components/CompanyDrawer";
+import contactService from "../services/contactService";
 import "../styles/CompanyPage.css";
 import PlaceholderList from "../components/PlaceholderList";
 import PlaceholderGrid from "../components/PlaceholderGrid.js";
@@ -23,7 +23,7 @@ function CompanyPage() {
 
   useEffect(() => {
     contactService
-      .getContacts() // Updated service call
+      .getContacts()
       .then((data) => {
         setCompanies(data);
         setLoading(false);
@@ -39,29 +39,71 @@ function CompanyPage() {
     setDrawerVisible(true);
   };
 
+  const handleAddNewCompany = () => {
+    setSelectedCompany({
+      id: "",
+      phoneNumber: "",
+      address: "",
+      avatar: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      companyName: "",
+      industry: "",
+      companyLogo: "",
+      companyDeals: "",
+      companyRevenue: "",
+      createdAt: "",
+      updatedAt: "",
+      salesOwner: "",
+    });
+    setDrawerVisible(true);
+  };
+
   const handleDrawerClose = () => {
     setDrawerVisible(false);
     setSelectedCompany(null);
   };
 
-  const handleSaveCompany = (updatedCompany) => {
-    // Update the company in the state and close the drawer
-    setCompanies((prevCompanies) =>
-      prevCompanies.map((company) =>
-        company.id === selectedCompany.id
-          ? { ...company, ...updatedCompany }
-          : company
-      )
-    );
-    handleDrawerClose();
+  const handleSaveCompany = async (updatedCompany) => {
+    try {
+      if (selectedCompany.id) {
+        await contactService.updateContact(selectedCompany.id, updatedCompany);
+        notification.success({
+          message: "Company Modified",
+          description: `Company ${updatedCompany.companyName} has been successfully modified.`,
+        });
+      } else {
+        await contactService.createContact(updatedCompany);
+        notification.success({
+          message: "Company Added",
+          description: `Company ${updatedCompany.companyName} has been successfully added.`,
+        });
+      }
+      setCompanies((prevCompanies) =>
+        prevCompanies.map((company) =>
+          company.id === selectedCompany.id
+            ? { ...company, ...updatedCompany }
+            : company
+        )
+      );
+      handleDrawerClose();
+    } catch (error) {
+      notification.error({
+        message: "Error",
+        description: "There was an error saving the company.",
+      });
+    }
   };
 
   if (error)
     return <Alert message="Error" description={error} type="error" showIcon />;
 
-  const filteredCompanies = companies.filter((company) =>
-    company.companyName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredCompanies = companies
+    .filter((company) => company.companyName !== null)
+    .filter((company) =>
+      company.companyName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   return (
     <Layout className="company-page">
@@ -69,9 +111,10 @@ function CompanyPage() {
         <CompanyHeader
           refreshCompanies={() =>
             contactService.getContacts().then(setCompanies)
-          } // Updated service call
+          }
           setViewMode={setViewMode}
           setSearchQuery={setSearchQuery}
+          onAddNewCompany={handleAddNewCompany}
         />
       </Content>
       <Content>
@@ -93,12 +136,12 @@ function CompanyPage() {
           />
         )}
       </Content>
-      {/* <CompanyDrawer
+      <CompanyDrawer
         visible={drawerVisible}
         onClose={handleDrawerClose}
         company={selectedCompany}
         onSave={handleSaveCompany}
-      /> */}
+      />
     </Layout>
   );
 }
