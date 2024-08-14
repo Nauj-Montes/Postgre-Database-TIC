@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Typography, Alert } from "antd";
+import { Layout, Typography, Alert, message } from "antd"; // Import message
 import ContactHeader from "../components/ContactHeader";
 import ContactList from "../components/ContactList";
 import ContactGrid from "../components/ContactGrid";
@@ -52,6 +52,7 @@ function ContactPage() {
       } else {
         // Add the new contact to the state
         await contactService.createContact(updatedContact);
+        message.success("Contact created!"); // Show success message
       }
       // Refresh contacts from the server
       const refreshedContacts = await contactService.getContacts();
@@ -97,6 +98,9 @@ function ContactPage() {
           <ContactList
             contacts={filteredContacts}
             onContactClick={handleContactClick}
+            refreshContacts={() =>
+              contactService.getContacts().then(setContacts)
+            }
           />
         ) : (
           <ContactGrid

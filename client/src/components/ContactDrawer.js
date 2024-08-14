@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Drawer, Form, Input, Button, Avatar } from "antd";
 import {
   UserOutlined,
@@ -10,6 +10,14 @@ import "../styles/ContactDrawer.css"; // Import custom CSS
 
 function ContactDrawer({ visible, onClose, contact, onSave }) {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (contact) {
+      form.setFieldsValue(contact);
+    } else {
+      form.resetFields();
+    }
+  }, [contact, form]);
 
   const handleSave = () => {
     form
