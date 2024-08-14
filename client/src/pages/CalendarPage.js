@@ -17,7 +17,7 @@ const CalendarPage = () => {
   const [error, setError] = useState(null);
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [isCreatingEvent, setIsCreatingEvent] = useState(false);
-  const [selectedEvents, setSelectedEvents] = useState([]); // Add state for selected events
+  const [selectedEvents, setSelectedEvents] = useState([]);
 
   const fetchEventsAndContacts = async () => {
     try {
@@ -39,16 +39,13 @@ const CalendarPage = () => {
   useEffect(() => {
     fetchEventsAndContacts();
 
-    // Check if the flag is set in localStorage
     if (localStorage.getItem("showPopup") === "true") {
       setDrawerVisible(true);
-      localStorage.removeItem("showPopup"); // Clear the flag
+      localStorage.removeItem("showPopup");
     }
   }, []);
 
   const getListData = (value) => {
-    // Define the getListData function
-    // This is a placeholder implementation, replace it with your actual logic
     return events.filter((event) => event.date === value);
   };
 
@@ -73,7 +70,7 @@ const CalendarPage = () => {
   };
 
   const handleDeleteEvent = (eventId) => {
-    setDrawerVisible(false); // Close the drawer first
+    setDrawerVisible(false);
     setEvents(events.filter((event) => event.id !== eventId));
   };
 

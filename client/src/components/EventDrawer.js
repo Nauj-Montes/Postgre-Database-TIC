@@ -1,26 +1,26 @@
 import React, { useState } from "react";
 import {
   Drawer,
+  Form,
+  Select,
+  DatePicker,
+  Input,
+  Button,
   List,
   Row,
   Col,
   Avatar,
-  Button,
-  Input,
-  Select,
-  DatePicker,
-  Form,
   message,
 } from "antd";
 import {
-  PhoneOutlined,
-  HomeOutlined,
-  BankOutlined,
   UserOutlined,
+  BankOutlined,
+  HomeOutlined,
+  PhoneOutlined,
 } from "@ant-design/icons";
-import { format } from "date-fns";
-import EventItem from "./EventItem";
-import calendarService from "../services/calendarService"; // Import calendarService
+import { format } from "date-fns"; // Import format from date-fns
+import calendarService from "../services/calendarService";
+import EventItem from "./EventItem"; // Import EventItem component
 
 const { Option } = Select;
 
@@ -53,23 +53,43 @@ const EventDrawer = ({
   };
 
   const handleAddEvent = () => {
-    onAddEvent(newEvent);
-    setNewEvent({ contactId: null, type: "email", date: null, notes: "" });
+    const formattedEvent = {
+      ...newEvent,
+      date: newEvent.date ? newEvent.date.toISOString() : null,
+    };
+    calendarService
+      .createEvent(formattedEvent)
+      .then(() => {
+        message.success("Event added successfully");
+        onAddEvent(formattedEvent);
+      })
+      .catch((error) => {
+        message.error("Failed to add event");
+      });
   };
 
   const handleEditEvent = (event) => {
-    // Implement edit logic here
-    calendarService.editEvent(event).then(() => {
-      message.success("Event edited successfully");
-      onClose();
-    });
+    calendarService
+      .updateEvent(event.id, event)
+      .then(() => {
+        message.success("Event updated successfully");
+        onAddEvent(event);
+      })
+      .catch((error) => {
+        message.error("Failed to update event");
+      });
   };
 
   const handleDeleteEvent = (eventId) => {
-    calendarService.deleteEvent(eventId).then(() => {
-      message.success("Event deleted successfully");
-      onClose(); // Close the drawer
-    });
+    calendarService
+      .deleteEvent(eventId)
+      .then(() => {
+        message.success("Event deleted successfully");
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Failed to delete event", error);
+      });
   };
 
   return (
