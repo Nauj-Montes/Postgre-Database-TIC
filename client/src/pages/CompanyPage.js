@@ -34,6 +34,10 @@ function CompanyPage() {
       });
   }, []);
 
+  const refreshCompanies = () => {
+    contactService.getContacts().then(setCompanies);
+  };
+
   const handleCompanyClick = (company) => {
     setSelectedCompany(company);
     setDrawerVisible(true);
@@ -74,7 +78,6 @@ function CompanyPage() {
           description: `Company ${updatedCompany.companyName} has been successfully modified.`,
         });
       } else {
-        await contactService.createContact(updatedCompany);
         notification.success({
           message: "Company Added",
           description: `Company ${updatedCompany.companyName} has been successfully added.`,
@@ -109,9 +112,7 @@ function CompanyPage() {
     <Layout className="company-page">
       <Content className="company-header">
         <CompanyHeader
-          refreshCompanies={() =>
-            contactService.getContacts().then(setCompanies)
-          }
+          refreshCompanies={refreshCompanies}
           setViewMode={setViewMode}
           setSearchQuery={setSearchQuery}
           onAddNewCompany={handleAddNewCompany}
@@ -128,6 +129,7 @@ function CompanyPage() {
           <CompanyList
             companies={filteredCompanies}
             onCompanyClick={handleCompanyClick}
+            refreshCompanies={refreshCompanies}
           />
         ) : (
           <CompanyGrid
@@ -141,6 +143,7 @@ function CompanyPage() {
         onClose={handleDrawerClose}
         company={selectedCompany}
         onSave={handleSaveCompany}
+        refreshCompanies={refreshCompanies}
       />
     </Layout>
   );
