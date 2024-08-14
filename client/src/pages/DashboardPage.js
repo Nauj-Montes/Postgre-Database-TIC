@@ -44,10 +44,12 @@ const Dashboard = () => {
   );
 
   // Data for charts
-  const industryData = contacts.map((contact) => ({
-    type: contact.industry,
-    value: 1,
-  }));
+  const industryData = contacts
+    .filter((contact) => contact.industry !== null) // Filter out null industries
+    .map((contact) => ({
+      type: contact.industry,
+      value: 1,
+    }));
 
   const dealsData = contacts.map((contact) => ({
     company: contact.companyName,

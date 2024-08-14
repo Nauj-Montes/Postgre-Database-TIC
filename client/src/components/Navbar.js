@@ -40,12 +40,6 @@ function Navbar() {
             Contacts
           </Link>
         </Menu.Item>
-        <Menu.Item key="5">
-          <Link to="/administration" className="ant-nav-link">
-            <SettingOutlined />
-            Administration
-          </Link>
-        </Menu.Item>
       </Menu>
     </Sider>
   );
