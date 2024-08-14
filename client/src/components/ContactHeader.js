@@ -34,7 +34,12 @@ const StyledContactHeader = styled.div`
   }
 `;
 
-function ContactHeader({ refreshContacts, setViewMode, setSearchQuery }) {
+function ContactHeader({
+  refreshContacts,
+  setViewMode,
+  setSearchQuery,
+  onAddNewContact,
+}) {
   const [contact, setContact] = useState({
     firstName: "",
     lastName: "",
@@ -59,7 +64,7 @@ function ContactHeader({ refreshContacts, setViewMode, setSearchQuery }) {
 
   return (
     <StyledContactHeader>
-      <Button type="primary" icon={<PlusOutlined />} onClick={handleSubmit}>
+      <Button type="primary" icon={<PlusOutlined />} onClick={onAddNewContact}>
         Add New Contact
       </Button>
       <Space>

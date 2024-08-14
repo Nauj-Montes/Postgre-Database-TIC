@@ -15,8 +15,19 @@ const getContactById = async (id) => {
 };
 
 const createContact = async (contact) => {
-  const response = await axios.post(API_URL, contact);
-  return response.data;
+  try {
+    const response = await axios.post(API_URL, contact);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      console.error("Error response data:", error.response.data);
+      console.error("Error response status:", error.response.status);
+      console.error("Error response headers:", error.response.headers);
+    } else {
+      console.error("Error message:", error.message);
+    }
+    throw error;
+  }
 };
 
 const updateContact = async (id, contact) => {

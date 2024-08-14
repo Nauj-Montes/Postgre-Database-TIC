@@ -44,16 +44,27 @@ function ContactPage() {
     setSelectedContact(null);
   };
 
-  const handleSaveContact = (updatedContact) => {
-    // Update the contact in the state and close the drawer
-    setContacts((prevContacts) =>
-      prevContacts.map((contact) =>
-        contact.id === selectedContact.id
-          ? { ...contact, ...updatedContact }
-          : contact
-      )
-    );
+  const handleSaveContact = async (updatedContact) => {
+    try {
+      if (selectedContact) {
+        // Update the contact in the state and close the drawer
+        await contactService.updateContact(selectedContact.id, updatedContact);
+      } else {
+        // Add the new contact to the state
+        await contactService.createContact(updatedContact);
+      }
+      // Refresh contacts from the server
+      const refreshedContacts = await contactService.getContacts();
+      setContacts(refreshedContacts);
+    } catch (error) {
+      console.error("Failed to save contact:", error);
+    }
     handleDrawerClose();
+  };
+
+  const handleAddNewContact = () => {
+    setSelectedContact(null);
+    setDrawerVisible(true);
   };
 
   if (error)
@@ -72,6 +83,7 @@ function ContactPage() {
           refreshContacts={() => contactService.getContacts().then(setContacts)}
           setViewMode={setViewMode}
           setSearchQuery={setSearchQuery}
+          onAddNewContact={handleAddNewContact} // Pass the handler to ContactHeader
         />
       </Content>
       <Content>
