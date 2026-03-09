@@ -25,13 +25,6 @@ Para contribuir al proyecto, sigue estos pasos:
     - **Contaseña**: root
     - **Contraseña DB**: postgres
 
-## Equipo de Desarrollo
-
-- **Juan Montes**
-- **Alexis Este**
-- **Verónica Chacón**
-- **Manuel de León**
-
 ## Funcionalidades
 
 - **Gestión de contactos**: CRUD de contactos con campos como nombre, correo, teléfono, dirección, etc.
